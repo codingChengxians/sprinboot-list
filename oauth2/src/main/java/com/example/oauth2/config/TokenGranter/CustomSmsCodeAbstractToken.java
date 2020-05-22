@@ -1,9 +1,6 @@
 package com.example.oauth2.config.TokenGranter;
 
-import com.example.oauth2.config.token.SmsCodeAuthenticationToken;
 import com.example.oauth2.service.impl.SmsCodeServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.*;
@@ -11,7 +8,6 @@ import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import javax.annotation.PostConstruct;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,12 +16,8 @@ public class CustomSmsCodeAbstractToken extends AbstractTokenGranter {
     private SmsCodeServiceImpl userDetailsService;
     private OAuth2RequestFactory requestFactory;
 
-    @PostConstruct
-    private void  init (){
-        this.userDetailsService = new SmsCodeServiceImpl();
-    }
-    public CustomSmsCodeAbstractToken(AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory,SmsCodeServiceImpl smsCodeService) {
-        this(tokenServices, clientDetailsService, requestFactory, "sms_code");
+    public CustomSmsCodeAbstractToken(AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory, SmsCodeServiceImpl smsCodeService) {
+        this(tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
         this.userDetailsService = smsCodeService;
 
     }
@@ -41,8 +33,6 @@ public class CustomSmsCodeAbstractToken extends AbstractTokenGranter {
         String phone = (String) parameters.get("phone");
         String smsCode = (String) parameters.get("smsCode");
         parameters.remove("smsCode");
-        Authentication userAuth = new SmsCodeAuthenticationToken(phone, smsCode);
-        ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
         UserDetails userDetail = this.getUserDetail(phone, smsCode);
         OAuth2Request storedOAuth2Request = this.requestFactory.createOAuth2Request(client, tokenRequest);
         PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userDetail, null, userDetail.getAuthorities());

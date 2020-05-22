@@ -1,7 +1,9 @@
 package com.example.oauth2.config;
 
+import com.example.oauth2.config.TokenGranter.CustomMiniAppTokenGrant;
 import com.example.oauth2.config.TokenGranter.CustomSmsCodeAbstractToken;
 import com.example.oauth2.entity.SysAdmin;
+import com.example.oauth2.service.impl.MiniAppServiceImpl;
 import com.example.oauth2.service.impl.SmsCodeServiceImpl;
 import com.example.oauth2.service.impl.SysAdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,8 @@ public class Oauth2Auth extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private SmsCodeServiceImpl smsCodeService;
     @Autowired
+    private MiniAppServiceImpl miniAppService;
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -73,7 +77,7 @@ public class Oauth2Auth extends AuthorizationServerConfigurerAdapter {
                 .withClient("clientId")
                 .secret(bCryptPasswordEncoder.encode("123456"))
                 //类型
-                .authorizedGrantTypes("authorization_code", "password", "refresh_token", "sms_code")
+                .authorizedGrantTypes("authorization_code", "password", "refresh_token", "sms_code","mini_app")
                 // 或调地址
                 .redirectUris("http://www.baidu.com")
                 //配置申请的权限范围
@@ -158,6 +162,7 @@ public class Oauth2Auth extends AuthorizationServerConfigurerAdapter {
             tokenGranters.add(new ResourceOwnerPasswordTokenGranter(this.authenticationManager, tokenServices, clientDetails, requestFactory));
         }
         tokenGranters.add(new CustomSmsCodeAbstractToken(tokenServices, clientDetails, requestFactory, smsCodeService));
+        tokenGranters.add(new CustomMiniAppTokenGrant(tokenServices, clientDetails, requestFactory, miniAppService));
 
 
         return tokenGranters;
