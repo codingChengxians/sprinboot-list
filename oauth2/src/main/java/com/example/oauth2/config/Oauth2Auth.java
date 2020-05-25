@@ -163,8 +163,6 @@ public class Oauth2Auth extends AuthorizationServerConfigurerAdapter {
         }
         tokenGranters.add(new CustomSmsCodeAbstractToken(tokenServices, clientDetails, requestFactory, smsCodeService));
         tokenGranters.add(new CustomMiniAppTokenGrant(tokenServices, clientDetails, requestFactory, miniAppService));
-
-
         return tokenGranters;
     }
 }

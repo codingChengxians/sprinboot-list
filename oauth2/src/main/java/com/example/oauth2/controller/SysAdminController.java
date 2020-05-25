@@ -23,7 +23,7 @@ public class SysAdminController {
     private SysAdminServiceImpl sysAdminService;
 
 
-    @GetMapping("/hello")
+    @RequestMapping("/hello")
     public String hello(){
         return  "hello";
     }
@@ -32,14 +32,4 @@ public class SysAdminController {
     public String index(){
        return  "index";
    }
-//   @GetMapping("/index")
-//    public String index(){
-//       return  "index";
-//   }
-//
-//    @GetMapping("/index")
-//    public String index() {
-//        return "index";
-//    }
-
 }

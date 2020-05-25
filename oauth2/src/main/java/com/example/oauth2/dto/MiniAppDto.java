@@ -11,5 +11,5 @@ public class MiniAppDto {
     private String session_key;
     private String unionid;
     private int errcode;
-    private String errMsg;
+    private String errmsg;
 }

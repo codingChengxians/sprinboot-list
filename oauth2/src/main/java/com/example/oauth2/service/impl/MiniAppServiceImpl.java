@@ -39,14 +39,14 @@ public class MiniAppServiceImpl {
     private MiniAppDto getOpenId(String code) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxb629f2bbf5130171&secret=26a4d7e031afcce029f2092f491988b4&js_code=" + code + "&grant_type=authorization_code";
         MiniAppDto miniAppDto = this.restTemplate().getForEntity(url, MiniAppDto.class).getBody();
+        System.out.println(miniAppDto);
         try {
             if (miniAppDto.getErrcode() != 0) {
-                throw new Exception(miniAppDto.getErrMsg());
+                throw new Exception(miniAppDto.getErrmsg());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(miniAppDto);
         return miniAppDto;
     }
 
