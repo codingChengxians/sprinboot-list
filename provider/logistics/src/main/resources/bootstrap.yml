@@ -1,0 +1,8 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: cloud-logistics
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
